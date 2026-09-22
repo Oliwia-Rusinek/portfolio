@@ -2511,7 +2511,213 @@ max-width:100%;
 }
 
 
+/* =========================================================
+   KATEGORIE PROJEKTÓW
+   ========================================================= */
 
+html {
+    scroll-behavior: smooth;
+}
+
+
+/* ================= KAFELKI KATEGORII ================= */
+
+.project-categories {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 45px 0 80px;
+}
+
+
+.project-category {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 190px;
+
+    padding: 30px 25px;
+
+    text-decoration: none;
+    text-align: center;
+
+    color: inherit;
+
+    border-radius: 22px;
+
+    background: rgba(255, 255, 255, 0.05);
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+
+    transition:
+        transform 0.3s ease,
+        background 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+.project-category:hover {
+    transform: translateY(-7px);
+
+    background: rgba(255, 255, 255, 0.08);
+
+    border-color: rgba(255, 255, 255, 0.25);
+
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+
+.category-icon {
+    font-size: 40px;
+
+    margin-bottom: 15px;
+
+    display: block;
+}
+
+
+.project-category h3 {
+    margin: 0 0 10px;
+
+    font-size: 19px;
+
+    font-weight: 600;
+}
+
+
+.project-category p {
+    margin: 0;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    opacity: 0.7;
+}
+
+
+/* =========================================================
+   SEKCJE POSZCZEGÓLNYCH KATEGORII
+   ========================================================= */
+
+.project-category-section {
+
+    scroll-margin-top: 100px;
+
+    margin-top: 80px;
+
+    margin-bottom: 100px;
+}
+
+
+.project-category-section h2 {
+
+    margin-bottom: 10px;
+
+}
+
+
+.category-description {
+
+    margin-bottom: 35px;
+
+    opacity: 0.7;
+
+    font-size: 15px;
+
+    line-height: 1.6;
+
+}
+
+
+/* =========================================================
+   PROJEKTY W KATEGORII
+   ========================================================= */
+
+.category-projects {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 35px;
+
+}
+
+
+/* =========================================================
+   ODDZIELENIE KATEGORII
+   ========================================================= */
+
+.project-category-section + .project-category-section {
+
+    padding-top: 30px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .project-categories {
+
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .project-categories {
+
+        grid-template-columns: 1fr;
+
+        gap: 15px;
+
+        margin-top: 30px;
+
+        margin-bottom: 60px;
+
+    }
+
+
+    .project-category {
+
+        min-height: 150px;
+
+        padding: 25px 20px;
+
+    }
+
+
+    .category-icon {
+
+        font-size: 34px;
+
+    }
+
+
+    .project-category-section {
+
+        scroll-margin-top: 80px;
+
+        margin-top: 60px;
+
+        margin-bottom: 70px;
+
+    }
+
+}
 
 
 
