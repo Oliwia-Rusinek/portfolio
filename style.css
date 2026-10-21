@@ -1153,7 +1153,7 @@ color:white;
 
 
 /* =====================================
-   VIDEO JAVA
+   VIDEO & ROLKI PIONOWE (9:16)
 ===================================== */
 
 
@@ -1181,6 +1181,28 @@ width:100%;
 
 display:block;
 
+}
+
+
+/* Specjalne dopasowanie dla pionowych rolek w kartach projektów */
+.project .video-container {
+    position: relative;
+    width: 100%;
+    max-width: 360px;
+    margin: 20px auto 0 auto;
+    padding-top: 177.78%;
+    background: #000;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.project .video-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 
@@ -1353,148 +1375,6 @@ opacity:1;
 
     transition:
         background .3s ease,
-        transform .3s ease;
-
-}
-
-
-.lightbox-close:hover{
-
-    background:rgba(168,85,247,.7);
-
-    transform:rotate(90deg);
-
-}
-
-
-/* BLOKADA PRZEWIJANIA STRONY */
-
-body.lightbox-open{
-
-    overflow:hidden;
-
-}
-
-/* =====================================
-   LIGHTBOX - POWIĘKSZENIE ZDJĘCIA
-===================================== */
-
-.lightbox{
-
-    position:fixed;
-
-    inset:0;
-
-    width:100%;
-
-    height:100%;
-
-    background:rgba(0,0,0,.94);
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    padding:40px;
-
-    z-index:99999;
-
-    opacity:0;
-
-    visibility:hidden;
-
-    transition:
-        opacity .3s ease,
-        visibility .3s ease;
-
-    cursor:zoom-out;
-
-}
-
-
-/* OTWARTE ZDJĘCIE */
-
-.lightbox.active{
-
-    opacity:1;
-
-    visibility:visible;
-
-}
-
-
-/* DUŻE ZDJĘCIE */
-
-.lightbox img{
-
-    max-width:95vw;
-
-    max-height:90vh;
-
-    width:auto;
-
-    height:auto;
-
-    object-fit:contain;
-
-    border-radius:15px;
-
-    box-shadow:
-
-        0 20px 80px rgba(0,0,0,.8);
-
-    transform:scale(.85);
-
-    transition:transform .3s ease;
-
-    cursor:default;
-
-}
-
-
-.lightbox.active img{
-
-    transform:scale(1);
-
-}
-
-
-/* PRZYCISK X */
-
-.lightbox-close{
-
-    position:absolute;
-
-    top:20px;
-
-    right:30px;
-
-    width:52px;
-
-    height:52px;
-
-    border:none;
-
-    border-radius:50%;
-
-    background:rgba(255,255,255,.1);
-
-    color:white;
-
-    font-size:36px;
-
-    line-height:1;
-
-    cursor:pointer;
-
-    z-index:2;
-
-    transition:
-
-        background .3s ease,
-
         transform .3s ease;
 
 }
@@ -2719,6 +2599,27 @@ html {
 
 }
 
+/* ================= STYLE DLA ROLEK WIDEO W GALERII ================= */
+
+/* Ustawienie sztywnych proporcji 9:16 dla kontenera wideo */
+.gallery .video-container {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  background-color: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Upewnienie się, że sam plik wideo wypełnia idealnie cały kontener */
+.gallery .video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
 
 
 /* =====================================
