@@ -86,28 +86,6 @@
           Interesuję się nowoczesnymi technologiami, projektowaniem cyfrowych produktów oraz wykorzystaniem narzędzi AI do tworzenia funkcjonalnych i estetycznych rozwiązań.
         </p>
       </div>
-
-      <div class="about-info">
-        <div class="info-box">
-          <h3>🌐 Web Development</h3>
-          <p>Responsywne strony internetowe, UI/UX oraz aplikacje webowe</p>
-        </div>
-
-        <div class="info-box">
-          <h3>💻 Programowanie</h3>
-          <p>Python, Java, HTML, CSS, SQL, C</p>
-        </div>
-
-        <div class="info-box">
-          <h3>🎬 Montaż Wideo</h3>
-          <p>CapCut, DaVinci Resolve</p>
-        </div>
-
-        <div class="info-box">
-          <h3>🎨 Grafika</h3>
-          <p>Adobe Photoshop, Adobe Illustrator, CorelDRAW, AI Design</p>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -126,9 +104,9 @@
       </div>
 
       <div class="specialization-card">
-      <h3>🎬 Montaż Wideo</h3>
-      <p>Montaż rolek oraz dynamicznych wideo na social media.</p>
-    </div>
+        <h3>🎬 Montaż Wideo</h3>
+        <p>Montaż rolek oraz dynamicznych wideo na social media.</p>
+      </div>
 
       <div class="specialization-card">
         <h3>🎨 Graphic Design</h3>
@@ -198,7 +176,7 @@
         <h3>🌾 Fundacja Polska Ziemia</h3>
         <span>Montażystka i graficzka (Umowa zlecenie)</span>
         <p>
-          Montaż materiałów audiowizualnych (wideo) oraz projektowanie i tworzenie materiałów graficznych[cite: 1].
+          Montaż materiałów audiowizualnych (wideo) oraz projektowanie i tworzenie materiałów graficznych.
         </p>
       </div> 
 
@@ -215,10 +193,10 @@
         <span>Praktykantka – IT, E-commerce & Grafika Komputerowa</span>
         <p>
           • Projektowanie grafik produktowych, banerów reklamowych i wizualizacji odzieży dla marek GQPrint.pl oraz Mistrall.com.pl.<br>
-          • Tworzenie i optymalizacja kart produktów: przygotowywanie opisów, specyfikacji technicznych oraz wprowadzanie danych[cite: 1].<br>
-          • Obróbka i przygotowanie zdjęć produktowych do publikacji przy użyciu Adobe Photoshop[cite: 1].<br>
-          • Wykorzystanie narzędzi AI do automatyzacji i wsparcia procesu tworzenia materiałów wizualnych[cite: 1].<br>
-          • Praca w środowisku e-commerce i zarządzanie prezentacją oferty cyfrowej[cite: 1].
+          • Tworzenie i optymalizacja kart produktów: przygotowywanie opisów, specyfikacji technicznych oraz wprowadzanie danych.<br>
+          • Obróbka i przygotowanie zdjęć produktowych do publikacji przy użyciu Adobe Photoshop.<br>
+          • Wykorzystanie narzędzi AI do automatyzacji i wsparcia procesu tworzenia materiałów wizualnych.<br>
+          • Praca w środowisku e-commerce i zarządzanie prezentacją oferty cyfrowej.
         </p>
       </div>
 
@@ -240,7 +218,7 @@
       Wybrane projekty z zakresu programowania, grafiki komputerowej, montażu wideo, projektowania stron internetowych oraz materiałów reklamowych.
     </p>
 
-    <!-- ================= KATEGORIE PROJEKTÓW ================= -->
+    <!-- KATEGORIE PROJEKTÓW -->
     <div class="project-categories">
       <a href="#category-uiux-web" class="project-category">
         <span class="category-icon">🖥️</span>
@@ -276,7 +254,7 @@
     <!-- KONTENER KATEGORII -->
     <div id="categorized-projects"></div>
 
-    <!-- LISTA WSZYSTKICH PROJEKTÓW DO POBIERANIA PRZEZ SCRIPT JS -->
+    <!-- LISTA PROJEKTÓW -->
 
     <!-- PROJEKT PETLY -->
     <div class="project">
@@ -532,7 +510,7 @@
       </div>
     </div>
 
-    <!-- PROJEKT MONTAŻ WIDEO (NAJPIERW) -->
+    <!-- PROJEKT MONTAŻ WIDEO -->
     <div class="project">
       <div class="project-header">
         <h3>🎬 Montaż wideo – Rolki informacyjne i publicystyczne</h3>
@@ -580,7 +558,7 @@
       </div>
     </div>
 
-    <!-- PROJEKT GRAFIKI REKLAMOWE (POTEM) -->
+    <!-- PROJEKT GRAFIKI REKLAMOWE -->
     <div class="project">
       <div class="project-header">
         <h3>📱 Grafiki reklamowe do mediów społecznościowych</h3>
@@ -721,134 +699,130 @@
     <img id="lightboxImage" src="" alt="Powiększone zdjęcie">
   </div>
 
-  <!-- ================= SKRYPT DO ZDJĘĆ ================= -->
-  <script>
-    const galleryImages = document.querySelectorAll(".gallery img");
-    const lightbox = document.getElementById("lightbox");
-    const lightboxImage = document.getElementById("lightboxImage");
-    const lightboxClose = document.getElementById("lightboxClose");
-
-    galleryImages.forEach(function(image) {
-      image.addEventListener("click", function() {
-        lightboxImage.src = image.src;
-        lightboxImage.alt = image.alt;
-        lightbox.classList.add("active");
-        document.body.classList.add("lightbox-open");
-      });
-    });
-
-    lightboxClose.addEventListener("click", function() {
-      lightbox.classList.remove("active");
-      document.body.classList.remove("lightbox-open");
-    });
-
-    lightbox.addEventListener("click", function(event) {
-      if (event.target === lightbox) {
-        lightbox.classList.remove("active");
-        document.body.classList.remove("lightbox-open");
-      }
-    });
-
-    document.addEventListener("keydown", function(event) {
-      if (event.key === "Escape") {
-        lightbox.classList.remove("active");
-        document.body.classList.remove("lightbox-open");
-      }
-    });
-  </script>
-
-  <!-- ================= KATEGORIE PROJEKTÓW - AUTOMATYCZNE SORTOWANIE ================= -->
+  <!-- ================= SKRYPTY ================= -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
+      // 1. SKRYPT SORTUJĄCY KATEGORIE
       const projectsContainer = document.getElementById("categorized-projects");
-      if (!projectsContainer) return;
-
-      const categories = {
-        "category-uiux-web": {
-          title: "🖥️ UI/UX & Web",
-          description: "Projektowanie interfejsów, aplikacji i stron internetowych.",
-          projects: [
-            "Interaktywny sklep zoologiczny — PETLY",
-            "Interaktywna karuzela produktowa 3D",
-            "Interfejs aplikacji mobilnej",
-            "System salonu kosmetycznego"
-          ]
-        },
-        "category-graphic-design": {
-          title: "🎨 Graphic Design",
-          description: "Branding, grafika reklamowa, packaging i projekty odzieżowe.",
-          projects: [
-            "Identyfikacja wizualna kawiarni",
-            "Plakat meczu koszykarskiego",
-            "Opakowanie na haczyki wędkarskie",
-            "Projekt haftu komputerowego",
-            "Koszulka"
-          ]
-        },
-        "category-ecommerce": {
-          title: "🛒 E-commerce & Product",
-          description: "Prezentacja produktów, wizualizacje i materiały sprzedażowe.",
-          projects: [
-            "Interaktywny sklep zoologiczny — PETLY",
-            "Prezentacja produktów w sklepie internetowym",
-            "Wizualizacje odzieży z wykorzystaniem AI"
-          ]
-        },
-        "category-social-video": {
-          title: "📱 Social Media, Video & Content",
-          description: "Grafiki reklamowe, krótkie formy video, TikTok, Reels, UGC i materiały promocyjne.",
-          projects: [
-            "Montaż wideo – Rolki informacyjne i publicystyczne",
-            "Grafiki reklamowe do mediów społecznościowych"
-          ]
-        },
-        "category-development": {
-          title: "💻 Development",
-          description: "Projekty programistyczne i interaktywne.",
-          projects: [
-            "Grafika i animacja 3D"
-          ]
-        }
-      };
-
-      const allProjects = Array.from(
-        document.querySelectorAll("#projects > .project")
-      );
-
-      Object.entries(categories).forEach(function ([categoryId, category]) {
-        const section = document.createElement("section");
-        section.id = categoryId;
-        section.className = "project-category-section";
-
-        const heading = document.createElement("h2");
-        heading.textContent = category.title;
-
-        const description = document.createElement("p");
-        description.className = "category-description";
-        description.textContent = category.description;
-
-        const projectsWrapper = document.createElement("div");
-        projectsWrapper.className = "category-projects";
-
-        section.appendChild(heading);
-        section.appendChild(description);
-        section.appendChild(projectsWrapper);
-        projectsContainer.appendChild(section);
-
-        category.projects.forEach(function (projectName) {
-          const project = allProjects.find(function (item) {
-            const title = item.querySelector("h3");
-            if (!title) return false;
-            return title.textContent.trim().includes(projectName);
-          });
-
-          if (project) {
-            projectsWrapper.appendChild(project.cloneNode(true));
+      if (projectsContainer) {
+        const categories = {
+          "category-uiux-web": {
+            title: "🖥️ UI/UX & Web",
+            description: "Projektowanie interfejsów, aplikacji i stron internetowych.",
+            projects: [
+              "Interaktywny sklep zoologiczny — PETLY",
+              "Interaktywna karuzela produktowa 3D",
+              "Interfejs aplikacji mobilnej",
+              "System salonu kosmetycznego"
+            ]
+          },
+          "category-graphic-design": {
+            title: "🎨 Graphic Design",
+            description: "Branding, grafika reklamowa, packaging i projekty odzieżowe.",
+            projects: [
+              "Identyfikacja wizualna kawiarni",
+              "Plakat meczu koszykarskiego",
+              "Opakowanie na haczyki wędkarskie",
+              "Projekt haftu komputerowego",
+              "Koszulka"
+            ]
+          },
+          "category-ecommerce": {
+            title: "🛒 E-commerce & Product",
+            description: "Prezentacja produktów, wizualizacje i materiały sprzedażowe.",
+            projects: [
+              "Interaktywny sklep zoologiczny — PETLY",
+              "Prezentacja produktów w sklepie internetowym",
+              "Wizualizacje odzieży z wykorzystaniem AI"
+            ]
+          },
+          "category-social-video": {
+            title: "📱 Social Media, Video & Content",
+            description: "Grafiki reklamowe, krótkie formy video, TikTok, Reels, UGC i materiały promocyjne.",
+            projects: [
+              "Montaż wideo – Rolki informacyjne i publicystyczne",
+              "Grafiki reklamowe do mediów społecznościowych"
+            ]
+          },
+          "category-development": {
+            title: "💻 Development",
+            description: "Projekty programistyczne i interaktywne.",
+            projects: [
+              "Grafika i animacja 3D"
+            ]
           }
+        };
+
+        const allProjects = Array.from(
+          document.querySelectorAll("#projects > .project")
+        );
+
+        Object.entries(categories).forEach(function ([categoryId, category]) {
+          const section = document.createElement("section");
+          section.id = categoryId;
+          section.className = "project-category-section";
+
+          const heading = document.createElement("h2");
+          heading.textContent = category.title;
+
+          const description = document.createElement("p");
+          description.className = "category-description";
+          description.textContent = category.description;
+
+          const projectsWrapper = document.createElement("div");
+          projectsWrapper.className = "category-projects";
+
+          section.appendChild(heading);
+          section.appendChild(description);
+          section.appendChild(projectsWrapper);
+          projectsContainer.appendChild(section);
+
+          category.projects.forEach(function (projectName) {
+            const project = allProjects.find(function (item) {
+              const title = item.querySelector("h3");
+              if (!title) return false;
+              return title.textContent.trim().includes(projectName);
+            });
+
+            if (project) {
+              projectsWrapper.appendChild(project.cloneNode(true));
+            }
+          });
         });
+
+        allProjects.forEach(function(p) { p.remove(); });
+      }
+
+      // 2. NAPRAWIONY SKRYPT DO POWIĘKSZANIA ZDJĘĆ (LIGHTBOX)
+      const lightbox = document.getElementById("lightbox");
+      const lightboxImage = document.getElementById("lightboxImage");
+      const lightboxClose = document.getElementById("lightboxClose");
+
+      document.addEventListener("click", function (event) {
+        if (event.target.tagName === "IMG" && event.target.closest(".gallery-item")) {
+          lightboxImage.src = event.target.src;
+          lightboxImage.alt = event.target.alt;
+          lightbox.classList.add("active");
+          document.body.classList.add("lightbox-open");
+        }
       });
 
-      allProjects.forEach(function(p) { p.remove(); });
+      function closeLightbox() {
+        lightbox.classList.remove("active");
+        document.body.classList.remove("lightbox-open");
+      }
+
+      if (lightboxClose) lightboxClose.addEventListener("click", closeLightbox);
+
+      if (lightbox) {
+        lightbox.addEventListener("click", function (event) {
+          if (event.target === lightbox) closeLightbox();
+        });
+      }
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") closeLightbox();
+      });
     });
   </script>
 

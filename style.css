@@ -194,49 +194,28 @@ section h2 {
 }
 
 /* =====================================
-   O MNIE & INFO BOXES
+   O MNIE
 ===================================== */
 .about-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  align-items: center;
+  display: block;
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--card);
+  padding: 40px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: center;
 }
 
 .about-text p {
   color: var(--gray);
   margin-bottom: 20px;
   font-size: 16px;
+  line-height: 1.8;
 }
 
-.about-info {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-.info-box {
-  background: var(--card);
-  padding: 20px;
-  border-radius: var(--radius);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: 0.3s;
-}
-
-.info-box:hover {
-  border-color: var(--blue);
-  transform: translateY(-4px);
-}
-
-.info-box h3 {
-  font-size: 18px;
-  margin-bottom: 8px;
-  color: white;
-}
-
-.info-box p {
-  font-size: 13px;
-  color: var(--gray);
+.about-text p:last-child {
+  margin-bottom: 0;
 }
 
 /* =====================================
@@ -501,7 +480,7 @@ section h2 {
 }
 
 /* =====================================
-   POPRAWIONE GALERIE ORAZ ZDJĘCIA
+   GALERIE ORAZ ZDJĘCIA
 ===================================== */
 .gallery {
   display: grid;
@@ -521,7 +500,6 @@ section h2 {
   flex-direction: column;
 }
 
-/* Sztywna, równa wysokość grafik w galeriach z dopasowaniem (object-fit) */
 .gallery-item img {
   width: 100%;
   height: 280px;
@@ -544,7 +522,6 @@ section h2 {
   background: var(--card-light);
 }
 
-/* Ograniczenie wielkości dla kafelków z tylko 1 zdjęciem (np. Koszulka, Plakat, Aplikacja mobilna) */
 .gallery:has(> .gallery-item:only-child) {
   grid-template-columns: minmax(auto, 420px);
   justify-content: center;
@@ -580,7 +557,6 @@ section h2 {
   flex-wrap: wrap;
 }
 
-/* Wyrównanie wolno wiszącego przycisku Pobierz CV */
 body > a.button[href="cv.pdf"] {
   display: table;
   margin: 0 auto 50px auto;
@@ -649,25 +625,25 @@ body.lightbox-open {
 }
 
 /* =====================================
-   STYLE DLA ROLEK WIDEO W GALERII (9:16)
+   STALE ZABLOKOWANE 9:16 DLA WIDEO
 ===================================== */
 .gallery .video-container {
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  aspect-ratio: 9 / 16;
-  background-color: #000;
-  border-radius: 12px 12px 0 0;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: none;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  aspect-ratio: 9 / 16 !important;
+  background-color: #000 !important;
+  border-radius: 12px 12px 0 0 !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: none !important;
 }
 
 .gallery .video-container video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 0 !important;
 }
