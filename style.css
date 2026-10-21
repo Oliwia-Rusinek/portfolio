@@ -37,6 +37,33 @@ body {
 }
 
 /* =====================================
+   NIEBIESKI PASEK PRZEWIJANIA (SCROLLBAR)
+===================================== */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--blue), var(--purple));
+  border-radius: 10px;
+  border: 2px solid #020617;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--blue);
+}
+
+/* Dla przeglądarki Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--blue) #020617;
+}
+
+/* =====================================
    HERO
 ===================================== */
 header {
@@ -462,7 +489,7 @@ section h2 {
   margin-bottom: 20px;
 }
 
-/* Kontenery wideo i galerie */
+/* Kontenery wideo dla pojedynczych projektów */
 .video-container {
   width: 100%;
   max-width: 400px;
@@ -625,7 +652,7 @@ body.lightbox-open {
 }
 
 /* =====================================
-   STALE ZABLOKOWANE 9:16 DLA WIDEO
+   DOPASOWANIE ROLEK WIDEO W GALERII (9:16 Bez Przybliżania)
 ===================================== */
 .gallery .video-container {
   width: 100% !important;
@@ -644,6 +671,15 @@ body.lightbox-open {
 .gallery .video-container video {
   width: 100% !important;
   height: 100% !important;
-  object-fit: cover !important;
+  object-fit: contain !important;
   border-radius: 0 !important;
+  background-color: #000 !important;
+}
+
+.gallery .video-container video:-webkit-full-screen {
+  object-fit: contain !important;
+}
+
+.gallery .video-container video:fullscreen {
+  object-fit: contain !important;
 }
