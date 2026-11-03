@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>System rezerwacji salonu kosmetycznego</title>
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f2f3f7;
+    color: #222;
+}
+
+.login-wrapper {
+    max-width: 420px;
+    margin: 80px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.app {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 260px;
+    background: #20232a;
+    color: white;
+    padding: 25px 18px;
+}
+
+.sidebar h2 {
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+.sidebar button {
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: #343844;
+    color: white;
+    text-align: left;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.sidebar button:hover,
+.sidebar button.active {
+    background: #6c63ff;
+}
+
+.content {
+    flex: 1;
+    padding: 30px;
+}
+
+.topbar {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+}
+
+.module {
+    background: white;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+}
+
+.hidden {
+    display: none;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 11px;
+    margin: 7px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+button {
+    background: #20232a;
+    color: white;
+    cursor: pointer;
+    border: none;
+}
+
+button:hover {
+    background: #333844;
+}
+
+.btn-small {
+    width: auto;
+    padding: 8px 12px;
+    margin-right: 6px;
+}
+
+.btn-edit {
+    background: #2563eb;
+}
+
+.btn-delete {
+    background: #b91c1c;
+}
+
+.btn-cancel {
+    background: #777;
+}
+
+.btn-done {
+    background: #15803d;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 18px;
+}
+
+.table th,
+.table td {
+    border-bottom: 1px solid #e2e2e2;
+    padding: 11px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.table th {
+    background: #f7f7fa;
+}
+
+.badge {
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.aktywna {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.odbyta {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.anulowana {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.info {
+    background: #eef2ff;
+    border-left: 4px solid #6c63ff;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.stat {
+    background: #f7f7fa;
+    padding: 16px;
+    border-radius: 12px;
+}
+
+.stat b {
+    font-size: 24px;
+    display: block;
+}
+
+.logout {
+    width: auto;
+    background: #777;
+}
+
+@media (max-width: 800px) {
+    .app {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .grid,
+    .stats {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+<body>
+
+<div id="loginView" class="login-wrapper">
+    <h2>🔐 Logowanie</h2>
+    <p class="info">Login: <b>admin</b><br>Hasło: <b>1234</b></p>
+    <input type="text" id="login" placeholder="Login">
+    <input type="password" id="haslo" placeholder="Hasło">
+    <button onclick="logowanie()">Zaloguj</button>
+    <p id="loginMsg"></p>
+</div>
+
+<div id="appView" class="app hidden">
+    <aside class="sidebar">
+        <h2>💄 Salon kosmetyczny</h2>
+        <button id="btnDashboard" onclick="pokazModul('dashboard')">🏠 Panel główny</button>
+        <button id="btnKlientki" onclick="pokazModul('klientki')">👩 Klientki</button>
+        <button id="btnPracownicy" onclick="pokazModul('pracownicy')">👩‍💼 Pracownicy</button>
+        <button id="btnWizyty" onclick="pokazModul('wizyty')">📅 Wizyty</button>
+    </aside>
+
+    <main class="content">
+        <div class="topbar">
+            <div>
+                <h2 id="tytulModulu">Panel główny</h2>
+                <span>System zarządzania rezerwacjami</span>
+            </div>
+            <button class="logout" onclick="wyloguj()">Wyloguj</button>
+        </div>
+
+        <section id="modulDashboard" class="module">
+            <h3>🏠 Panel główny</h3>
+            <p class="info">Tutaj widać podsumowanie systemu i najbliższe wizyty. Dane są zapisane w pamięci przeglądarki, więc nie znikają po odświeżeniu strony.</p>
+            <div class="stats">
+                <div class="stat"><b id="statKlientki">0</b>Klientki</div>
+                <div class="stat"><b id="statPracownicy">0</b>Pracownicy</div>
+                <div class="stat"><b id="statAktywne">0</b>Aktywne wizyty</div>
+                <div class="stat"><b id="statOdbyte">0</b>Odbyte wizyty</div>
+            </div>
+            <h3>Najbliższe aktywne wizyty</h3>
+            <div id="najblizszeWizyty"></div>
+        </section>
+
+        <section id="modulKlientki" class="module hidden">
+            <h3>👩 Moduł klientek</h3>
+            <p class="info">Osobny moduł do dodawania, edycji i usuwania klientek.</p>
+
+            <input type="hidden" id="edytowanaKlientkaId">
+            <div class="grid">
+                <input type="text" id="imieKlientki" placeholder="Imię klientki">
+                <input type="text" id="nazwiskoKlientki" placeholder="Nazwisko klientki">
+            </div>
+            <input type="text" id="telefonKlientki" placeholder="Telefon klientki">
+            <button id="btnZapiszKlientke" onclick="zapiszKlientke()">Dodaj klientkę</button>
+            <button id="btnAnulujKlientke" class="btn-cancel hidden" onclick="anulujEdycjeKlientki()">Anuluj edycję</button>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Imię i nazwisko</th>
+                        <th>Telefon</th>
+                        <th>Akcje</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaKlientek"></tbody>
+            </table>
+        </section>
+
+        <section id="modulPracownicy" class="module hidden">
+            <h3>👩‍💼 Moduł pracowników</h3>
+            <p class="info">Tutaj dodajesz osoby, które wykonują zabiegi. Przy dodawaniu wizyty można wybrać pracownika z listy.</p>
+
+            <input type="hidden" id="edytowanyPracownikId">
+            <div class="grid">
+                <input type="text" id="imiePracownika" placeholder="Imię pracownika">
+                <input type="text" id="nazwiskoPracownika" placeholder="Nazwisko pracownika">
+            </div>
+            <input type="text" id="specjalizacjaPracownika" placeholder="Specjalizacja, np. paznokcie, rzęsy, makijaż">
+            <button id="btnZapiszPracownika" onclick="zapiszPracownika()">Dodaj pracownika</button>
+            <button id="btnAnulujPracownika" class="btn-cancel hidden" onclick="anulujEdycjePracownika()">Anuluj edycję</button>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Pracownik</th>
+                        <th>Specjalizacja</th>
+                        <th>Akcje</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaPracownikow"></tbody>
+            </table>
+        </section>
+
+        <section id="modulWizyty" class="module hidden">
+            <h3>📅 Moduł wizyt</h3>
+            <p class="info">Wizyty są widoczne jako rekordy. Możesz dodać wizytę, wybrać klientkę, pracownika, zabieg, datę i godzinę. Wizyty z przeszłości automatycznie mają status „odbyta”.</p>
+
+            <input type="hidden" id="edytowanaWizytaId">
+            <div class="grid">
+                <select id="wyborKlientki"></select>
+                <select id="wyborPracownika"></select>
+            </div>
+            <div class="grid">
+                <select id="zabieg">
+                    <option value="">Wybierz zabieg</option>
+                    <option>Manicure hybrydowy</option>
+                    <option>Pedicure</option>
+                    <option>Stylizacja rzęs</option>
+                    <option>Henna brwi</option>
+                    <option>Makijaż okolicznościowy</option>
+                    <option>Zabieg pielęgnacyjny twarzy</option>
+                </select>
+                <input type="number" id="cena" placeholder="Cena zabiegu, np. 120">
+            </div>
+            <div class="grid">
+                <input type="date" id="dataWizyty">
+                <input type="time" id="godzinaWizyty">
+            </div>
+            <select id="statusWizyty">
+                <option value="aktywna">aktywna</option>
+                <option value="anulowana">anulowana</option>
+            </select>
+            <button id="btnZapiszWizyte" onclick="zapiszWizyte()">Dodaj wizytę</button>
+            <button id="btnAnulujWizyte" class="btn-cancel hidden" onclick="anulujEdycjeWizyty()">Anuluj edycję</button>
+
+            <h3>Rekordy wizyt</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Godzina</th>
+                        <th>Klientka</th>
+                        <th>Pracownik</th>
+                        <th>Zabieg</th>
+                        <th>Cena</th>
+                        <th>Status</th>
+                        <th>Akcje</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaWizyt"></tbody>
+            </table>
+        </section>
+    </main>
+</div>
+
+<script>
+let uzytkownik = { login: "admin", haslo: "1234" };
+
+let klientki = JSON.parse(localStorage.getItem("salonKlientkiV2"));
+let pracownicy = JSON.parse(localStorage.getItem("salonPracownicyV2"));
+let wizyty = JSON.parse(localStorage.getItem("salonWizytyV2"));
+
+if (!klientki || !pracownicy || !wizyty) {
+    klientki = [
+        { id: 1, imie: "Anna", nazwisko: "Kowalska", telefon: "500 100 200" },
+        { id: 2, imie: "Marta", nazwisko: "Nowak", telefon: "501 222 333" },
+        { id: 3, imie: "Julia", nazwisko: "Wiśniewska", telefon: "502 444 555" }
+    ];
+
+    pracownicy = [
+        { id: 1, imie: "Karolina", nazwisko: "Zielińska", specjalizacja: "paznokcie" },
+        { id: 2, imie: "Oliwia", nazwisko: "Mazur", specjalizacja: "rzęsy i brwi" },
+        { id: 3, imie: "Natalia", nazwisko: "Lis", specjalizacja: "makijaż i twarz" }
+    ];
+
+    wizyty = [
+        { id: 1, klientId: 1, pracownikId: 1, zabieg: "Manicure hybrydowy", cena: 120, data: "2026-05-13", godzina: "10:00", status: "aktywna" },
+        { id: 2, klientId: 2, pracownikId: 2, zabieg: "Stylizacja rzęs", cena: 180, data: "2026-05-15", godzina: "12:30", status: "aktywna" },
+        { id: 3, klientId: 3, pracownikId: 3, zabieg: "Makijaż okolicznościowy", cena: 200, data: "2026-05-16", godzina: "08:00", status: "aktywna" },
+        { id: 4, klientId: 1, pracownikId: 2, zabieg: "Henna brwi", cena: 60, data: "2026-05-17", godzina: "14:00", status: "aktywna" },
+        { id: 5, klientId: 2, pracownikId: 1, zabieg: "Pedicure", cena: 140, data: "2026-05-18", godzina: "09:30", status: "aktywna" }
+    ];
+
+    zapiszDane();
+}
+
+function zapiszDane() {
+    localStorage.setItem("salonKlientkiV2", JSON.stringify(klientki));
+    localStorage.setItem("salonPracownicyV2", JSON.stringify(pracownicy));
+    localStorage.setItem("salonWizytyV2", JSON.stringify(wizyty));
+}
+
+function statusWizyty(w) {
+    if (w.status === "anulowana") return "anulowana";
+    let termin = new Date(w.data + "T" + w.godzina);
+    let teraz = new Date();
+    return termin < teraz ? "odbyta" : "aktywna";
+}
+
+function znajdzKlientke(id) {
+    return klientki.find(k => String(k.id) === String(id));
+}
+
+function znajdzPracownika(id) {
+    return pracownicy.find(p => String(p.id) === String(id));
+}
+
+function logowanie() {
+    let login = document.getElementById("login").value;
+    let haslo = document.getElementById("haslo").value;
+
+    if (login === uzytkownik.login && haslo === uzytkownik.haslo) {
+        document.getElementById("loginView").classList.add("hidden");
+        document.getElementById("appView").classList.remove("hidden");
+        pokazModul("dashboard");
+    } else {
+        document.getElementById("loginMsg").innerText = "Błędne dane logowania!";
+    }
+}
+
+function wyloguj() {
+    document.getElementById("appView").classList.add("hidden");
+    document.getElementById("loginView").classList.remove("hidden");
+}
+
+function pokazModul(nazwa) {
+    ["Dashboard", "Klientki", "Pracownicy", "Wizyty"].forEach(m => {
+        document.getElementById("modul" + m).classList.add("hidden");
+        document.getElementById("btn" + m).classList.remove("active");
+    });
+
+    if (nazwa === "dashboard") {
+        document.getElementById("modulDashboard").classList.remove("hidden");
+        document.getElementById("btnDashboard").classList.add("active");
+        document.getElementById("tytulModulu").innerText = "Panel główny";
+    }
+
+    if (nazwa === "klientki") {
+        document.getElementById("modulKlientki").classList.remove("hidden");
+        document.getElementById("btnKlientki").classList.add("active");
+        document.getElementById("tytulModulu").innerText = "Klientki";
+    }
+
+    if (nazwa === "pracownicy") {
+        document.getElementById("modulPracownicy").classList.remove("hidden");
+        document.getElementById("btnPracownicy").classList.add("active");
+        document.getElementById("tytulModulu").innerText = "Pracownicy";
+    }
+
+    if (nazwa === "wizyty") {
+        document.getElementById("modulWizyty").classList.remove("hidden");
+        document.getElementById("btnWizyty").classList.add("active");
+        document.getElementById("tytulModulu").innerText = "Wizyty";
+    }
+
+    odswiez();
+}
+
+function zapiszKlientke() {
+    let id = document.getElementById("edytowanaKlientkaId").value;
+    let imie = document.getElementById("imieKlientki").value.trim();
+    let nazwisko = document.getElementById("nazwiskoKlientki").value.trim();
+    let telefon = document.getElementById("telefonKlientki").value.trim();
+
+    if (!imie || !nazwisko) {
+        alert("Uzupełnij imię i nazwisko klientki.");
+        return;
+    }
+
+    if (!id) {
+        klientki.push({ id: Date.now(), imie, nazwisko, telefon });
+    } else {
+        let k = znajdzKlientke(id);
+        k.imie = imie;
+        k.nazwisko = nazwisko;
+        k.telefon = telefon;
+    }
+
+    zapiszDane();
+    anulujEdycjeKlientki();
+    odswiez();
+}
+
+function edytujKlientke(id) {
+    let k = znajdzKlientke(id);
+    document.getElementById("edytowanaKlientkaId").value = k.id;
+    document.getElementById("imieKlientki").value = k.imie;
+    document.getElementById("nazwiskoKlientki").value = k.nazwisko;
+    document.getElementById("telefonKlientki").value = k.telefon;
+    document.getElementById("btnZapiszKlientke").innerText = "Zapisz zmiany klientki";
+    document.getElementById("btnAnulujKlientke").classList.remove("hidden");
+}
+
+function anulujEdycjeKlientki() {
+    document.getElementById("edytowanaKlientkaId").value = "";
+    document.getElementById("imieKlientki").value = "";
+    document.getElementById("nazwiskoKlientki").value = "";
+    document.getElementById("telefonKlientki").value = "";
+    document.getElementById("btnZapiszKlientke").innerText = "Dodaj klientkę";
+    document.getElementById("btnAnulujKlientke").classList.add("hidden");
+}
+
+function usunKlientke(id) {
+    if (wizyty.some(w => String(w.klientId) === String(id))) {
+        alert("Nie można usunąć klientki, która ma wizyty. Najpierw usuń jej wizyty.");
+        return;
+    }
+    klientki = klientki.filter(k => String(k.id) !== String(id));
+    zapiszDane();
+    odswiez();
+}
+
+function zapiszPracownika() {
+    let id = document.getElementById("edytowanyPracownikId").value;
+    let imie = document.getElementById("imiePracownika").value.trim();
+    let nazwisko = document.getElementById("nazwiskoPracownika").value.trim();
+    let specjalizacja = document.getElementById("specjalizacjaPracownika").value.trim();
+
+    if (!imie || !nazwisko || !specjalizacja) {
+        alert("Uzupełnij dane pracownika.");
+        return;
+    }
+
+    if (!id) {
+        pracownicy.push({ id: Date.now(), imie, nazwisko, specjalizacja });
+    } else {
+        let p = znajdzPracownika(id);
+        p.imie = imie;
+        p.nazwisko = nazwisko;
+        p.specjalizacja = specjalizacja;
+    }
+
+    zapiszDane();
+    anulujEdycjePracownika();
+    odswiez();
+}
+
+function edytujPracownika(id) {
+    let p = znajdzPracownika(id);
+    document.getElementById("edytowanyPracownikId").value = p.id;
+    document.getElementById("imiePracownika").value = p.imie;
+    document.getElementById("nazwiskoPracownika").value = p.nazwisko;
+    document.getElementById("specjalizacjaPracownika").value = p.specjalizacja;
+    document.getElementById("btnZapiszPracownika").innerText = "Zapisz zmiany pracownika";
+    document.getElementById("btnAnulujPracownika").classList.remove("hidden");
+}
+
+function anulujEdycjePracownika() {
+    document.getElementById("edytowanyPracownikId").value = "";
+    document.getElementById("imiePracownika").value = "";
+    document.getElementById("nazwiskoPracownika").value = "";
+    document.getElementById("specjalizacjaPracownika").value = "";
+    document.getElementById("btnZapiszPracownika").innerText = "Dodaj pracownika";
+    document.getElementById("btnAnulujPracownika").classList.add("hidden");
+}
+
+function usunPracownika(id) {
+    if (wizyty.some(w => String(w.pracownikId) === String(id))) {
+        alert("Nie można usunąć pracownika, który ma wizyty. Najpierw usuń jego wizyty.");
+        return;
+    }
+    pracownicy = pracownicy.filter(p => String(p.id) !== String(id));
+    zapiszDane();
+    odswiez();
+}
+
+function zapiszWizyte() {
+    let id = document.getElementById("edytowanaWizytaId").value;
+    let klientId = document.getElementById("wyborKlientki").value;
+    let pracownikId = document.getElementById("wyborPracownika").value;
+    let zabieg = document.getElementById("zabieg").value;
+    let cena = document.getElementById("cena").value;
+    let data = document.getElementById("dataWizyty").value;
+    let godzina = document.getElementById("godzinaWizyty").value;
+    let status = document.getElementById("statusWizyty").value;
+
+    if (!klientId || !pracownikId || !zabieg || !data || !godzina) {
+        alert("Uzupełnij klientkę, pracownika, zabieg, datę i godzinę.");
+        return;
+    }
+
+    let konflikt = wizyty.some(w =>
+        String(w.id) !== String(id) &&
+        String(w.pracownikId) === String(pracownikId) &&
+        w.data === data &&
+        w.godzina === godzina &&
+        statusWizyty(w) === "aktywna"
+    );
+
+    if (konflikt && status === "aktywna") {
+        alert("Ten pracownik ma już aktywną wizytę w tym terminie.");
+        return;
+    }
+
+    if (!id) {
+        wizyty.push({ id: Date.now(), klientId, pracownikId, zabieg, cena, data, godzina, status });
+    } else {
+        let w = wizyty.find(x => String(x.id) === String(id));
+        w.klientId = klientId;
+        w.pracownikId = pracownikId;
+        w.zabieg = zabieg;
+        w.cena = cena;
+        w.data = data;
+        w.godzina = godzina;
+        w.status = status;
+    }
+
+    zapiszDane();
+    anulujEdycjeWizyty();
+    odswiez();
+}
+
+function edytujWizyte(id) {
+    let w = wizyty.find(x => String(x.id) === String(id));
+    document.getElementById("edytowanaWizytaId").value = w.id;
+    document.getElementById("wyborKlientki").value = w.klientId;
+    document.getElementById("wyborPracownika").value = w.pracownikId;
+    document.getElementById("zabieg").value = w.zabieg;
+    document.getElementById("cena").value = w.cena;
+    document.getElementById("dataWizyty").value = w.data;
+    document.getElementById("godzinaWizyty").value = w.godzina;
+    document.getElementById("statusWizyty").value = w.status === "anulowana" ? "anulowana" : "aktywna";
+    document.getElementById("btnZapiszWizyte").innerText = "Zapisz zmiany wizyty";
+    document.getElementById("btnAnulujWizyte").classList.remove("hidden");
+    pokazModul("wizyty");
+}
+
+function anulujEdycjeWizyty() {
+    document.getElementById("edytowanaWizytaId").value = "";
+    document.getElementById("wyborKlientki").value = "";
+    document.getElementById("wyborPracownika").value = "";
+    document.getElementById("zabieg").value = "";
+    document.getElementById("cena").value = "";
+    document.getElementById("dataWizyty").value = "";
+    document.getElementById("godzinaWizyty").value = "";
+    document.getElementById("statusWizyty").value = "aktywna";
+    document.getElementById("btnZapiszWizyte").innerText = "Dodaj wizytę";
+    document.getElementById("btnAnulujWizyte").classList.add("hidden");
+}
+
+function anulujWizyte(id) {
+    let w = wizyty.find(x => String(x.id) === String(id));
+    w.status = "anulowana";
+    zapiszDane();
+    odswiez();
+}
+
+function usunWizyte(id) {
+    wizyty = wizyty.filter(w => String(w.id) !== String(id));
+    zapiszDane();
+    odswiez();
+}
+
+function odswiezSelecty() {
+    let s1 = document.getElementById("wyborKlientki");
+    let s2 = document.getElementById("wyborPracownika");
+
+    s1.innerHTML = '<option value="">Wybierz klientkę</option>';
+    s2.innerHTML = '<option value="">Wybierz pracownika</option>';
+
+    klientki.forEach(k => {
+        s1.innerHTML += `<option value="${k.id}">${k.imie} ${k.nazwisko}</option>`;
+    });
+
+    pracownicy.forEach(p => {
+        s2.innerHTML += `<option value="${p.id}">${p.imie} ${p.nazwisko} - ${p.specjalizacja}</option>`;
+    });
+}
+
+function odswiezTabele() {
+    document.getElementById("tabelaKlientek").innerHTML = klientki.map(k => `
+        <tr>
+            <td>${k.imie} ${k.nazwisko}</td>
+            <td>${k.telefon || "-"}</td>
+            <td>
+                <button class="btn-small btn-edit" onclick="edytujKlientke(${k.id})">Edytuj</button>
+                <button class="btn-small btn-delete" onclick="usunKlientke(${k.id})">Usuń</button>
+            </td>
+        </tr>
+    `).join("");
+
+    document.getElementById("tabelaPracownikow").innerHTML = pracownicy.map(p => `
+        <tr>
+            <td>${p.imie} ${p.nazwisko}</td>
+            <td>${p.specjalizacja}</td>
+            <td>
+                <button class="btn-small btn-edit" onclick="edytujPracownika(${p.id})">Edytuj</button>
+                <button class="btn-small btn-delete" onclick="usunPracownika(${p.id})">Usuń</button>
+            </td>
+        </tr>
+    `).join("");
+
+    let posortowane = wizyty.slice().sort((a,b) => (a.data + a.godzina).localeCompare(b.data + b.godzina));
+
+    document.getElementById("tabelaWizyt").innerHTML = posortowane.map(w => {
+        let k = znajdzKlientke(w.klientId);
+        let p = znajdzPracownika(w.pracownikId);
+        let st = statusWizyty(w);
+        let anulujBtn = st === "aktywna" ? `<button class="btn-small btn-cancel" onclick="anulujWizyte(${w.id})">Anuluj</button>` : "";
+        return `
+            <tr>
+                <td>${w.data}</td>
+                <td>${w.godzina}</td>
+                <td>${k ? k.imie + " " + k.nazwisko : "Brak"}</td>
+                <td>${p ? p.imie + " " + p.nazwisko : "Brak"}</td>
+                <td>${w.zabieg}</td>
+                <td>${w.cena || "-"} zł</td>
+                <td><span class="badge ${st}">${st}</span></td>
+                <td>
+                    <button class="btn-small btn-edit" onclick="edytujWizyte(${w.id})">Edytuj</button>
+                    ${anulujBtn}
+                    <button class="btn-small btn-delete" onclick="usunWizyte(${w.id})">Usuń</button>
+                </td>
+            </tr>
+        `;
+    }).join("");
+}
+
+function odswiezDashboard() {
+    let aktywne = wizyty.filter(w => statusWizyty(w) === "aktywna");
+    let odbyte = wizyty.filter(w => statusWizyty(w) === "odbyta");
+
+    document.getElementById("statKlientki").innerText = klientki.length;
+    document.getElementById("statPracownicy").innerText = pracownicy.length;
+    document.getElementById("statAktywne").innerText = aktywne.length;
+    document.getElementById("statOdbyte").innerText = odbyte.length;
+
+    let najblizsze = aktywne.slice().sort((a,b) => (a.data + a.godzina).localeCompare(b.data + b.godzina)).slice(0, 5);
+
+    if (najblizsze.length === 0) {
+        document.getElementById("najblizszeWizyty").innerHTML = "<p>Brak aktywnych wizyt.</p>";
+        return;
+    }
+
+    document.getElementById("najblizszeWizyty").innerHTML = `
+        <table class="table">
+            <thead>
+                <tr><th>Termin</th><th>Klientka</th><th>Pracownik</th><th>Zabieg</th></tr>
+            </thead>
+            <tbody>
+                ${najblizsze.map(w => {
+                    let k = znajdzKlientke(w.klientId);
+                    let p = znajdzPracownika(w.pracownikId);
+                    return `<tr>
+                        <td>${w.data} ${w.godzina}</td>
+                        <td>${k ? k.imie + " " + k.nazwisko : "-"}</td>
+                        <td>${p ? p.imie + " " + p.nazwisko : "-"}</td>
+                        <td>${w.zabieg}</td>
+                    </tr>`;
+                }).join("")}
+            </tbody>
+        </table>
+    `;
+}
+
+function odswiez() {
+    odswiezSelecty();
+    odswiezTabele();
+    odswiezDashboard();
+}
+
+window.onload = odswiez;
+</script>
+</body>
+</html>
